@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "224050768119",
+    "firebase_url": "https://light-novel-reader.firebaseio.com",
+    "project_id": "light-novel-reader",
+    "storage_bucket": "light-novel-reader.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224050768119:android:51541b068c8c3595788bf2",
+        "android_client_info": {
+          "package_name": "com.yarrharr.nyaareader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224050768119-2tqokevl08fen50keg95is51qmkkku1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX4ZiKwG2ZkZlvibmS-F7Sx9xbxiBELrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224050768119-2tqokevl08fen50keg95is51qmkkku1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
