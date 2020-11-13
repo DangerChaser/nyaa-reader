@@ -29,7 +29,6 @@ class BookActivity : AppCompatActivity() {
     private fun setBook(book: Book) {
         textViewBookName.text = book.name
         textViewAuthorName.text = book.author
-        textViewPageNumbers.text = book.pages.toString()
         textViewLongDescription.text = book.longDescription
         Glide.with(this).asBitmap().load(book.imageUrl).into(imageViewBook)
     }

@@ -2,6 +2,7 @@ package com.yarrharr.nyaareader
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -22,11 +23,31 @@ class Utilities private constructor(context: Context) {
     }
 
     private fun initData() {
-        val books = ArrayList<Book>()
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        editor.putString(BookListKeys.ALL.toString(), gson.toJson(books))
-        editor.commit()
+        db.collection("books")
+                .get()
+                .addOnSuccessListener { result ->
+                    val books = ArrayList<Book>()
+                    for ((i, document) in result.withIndex()) {
+                        Log.d(TAG, "${document.id} => ${document.data}")
+                        val name = document.id
+                        val author = document.data["author"] as String
+                        val imageUrl = document.data["imageUrl"] as String
+                        var description = document.data["description"] as String?
+                        if (description == null) {
+                            description = ""
+                        }
+                        val book = Book(i, name, author, imageUrl, description)
+                        books.add(book)
+                    }
+
+                    val editor = sharedPreferences.edit()
+                    val gson = Gson()
+                    editor.putString(BookListKeys.ALL.toString(), gson.toJson(books))
+                    editor.apply()
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+                }
     }
 
     private val allBooks: ArrayList<Book>?
@@ -128,12 +149,12 @@ class Utilities private constructor(context: Context) {
             }
             return instance
         }
+
+        private const val TAG = "Utilities"
     }
 
     init {
-        if (allBooks == null) {
-            initData()
-        }
+        initData()
         val editor = sharedPreferences.edit()
         val gson = Gson()
         if (finishedBooks == null) {
