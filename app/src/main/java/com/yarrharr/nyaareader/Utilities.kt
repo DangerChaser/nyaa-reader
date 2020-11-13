@@ -2,6 +2,8 @@ package com.yarrharr.nyaareader
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.ArrayList
@@ -9,6 +11,7 @@ import java.util.ArrayList
 const val BOOK_LIST_KEY = "BOOK_LIST_KEY"
 class Utilities private constructor(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE)
+    val db = Firebase.firestore
 
     enum class BookListKeys(s: String) {
         ALL("ALL_BOOKS"),

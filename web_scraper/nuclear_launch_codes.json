@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "light-novel-reader",
+  "private_key_id": "284d3efc5dd62c86ea344a5f97c78697cc8a3ed5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCpo2cwIn5wOOIl\nfAduH90XEAwQ3L6bVUpwqSKPdCEa6Mqnai5xo8lXQkrc31ExfFrW8ZXvQzc6OFKU\n9zJTfR96VlG2dvCbYvkoMYMLcLRyPZn6U/X+oea9LYNLQG8Abc9P/3OBNvFCKFxi\nJogRXb+e2jHR1cKHus26KkU4RaVs6i6k8/dZsmheybKoeGU8zVDxUL4R/G29LK/m\ncENwGw4kChvegEr9C6gJwiCKae6JVahT6cwGHhp0AlGEQj7zvPaCVOtQWysRkemz\nS2a8N8Y5NVYSNFiZUnGzc51x6lUqUVkUkNu46tGjfDkDdBc9RBwJJ8vxH9vBtmdX\n+44hLj3jAgMBAAECggEAI1avddcRuOYYsk9aquXHZHkK0m5x5KEJb1vEn9bE2Lq7\nENItV64TkPJ17vo0i1cJA3LzVZMOi7nU9kRivwK3ToBx6E1xxSUCm41o67awWIYd\nsAjSm5d1nl4/VitXlGLLx7IDCV19N9d5m1bEjL2XYAu7Sie6LRVMqyYIIndbxUrS\nzbfK6gfuGfHWqFcDh59KD2SGQ9sVYRN4j/IFcavWgYZUL8BejvY3n+vn72u1VTz9\n/eCxAK2KcluU/RI7a46R2GK51V+Lxu0ap5n0Y1SIJ7hG/HVnM0zkJiuV5zxyP4g3\nJkJwkFdO4XpEYADgYt+5dAFi8cd2wxEeHj5XMKQyiQKBgQDWWiHgB3VP5IJmTw2e\nxT/duHttilGLz+zJKR58epo2MjcwUOMifVIrYRcya5wRLsDGCU2//KriR6u1jBVj\nRPM3eCgjB6P/yRqcWIwTNXajbgOHtaJClLC0gPsaIawyCKMsMrwe1PhdNyhW9R2H\n3L43OlP0qmy/Y1PRITexcjhbKwKBgQDKmTVBCVZN1h0FmQ4lpS/U4kkn+5vSKdZe\nBsjsjSqo8oyGPT7ViaOEs1O/2ING+Hz9nULcBIbvFUiC4wxE0KS5VLM0iFS90uOi\nqLGekCjeFbZ+pWSOJLtmpAX1+H18/zA2CuTzl3RGL9Vtlmt6ojJjiIEcn8m+H/b9\nPqQu6FTsKQKBgQCUgnIB42j1514pQBAxtnvfRBfP9ws0kOR/IswKdm8tqXDvOruD\ng8xQXb5SopfIl9nb20pQ/9/tUra2281dr8HK5qb4Tizj5RNYy0iRbnM6G9i6R6+Z\n7abYCJzwp+/D4pQa5TPNMMS64KJETSMepGPto63TT9h0aX8C377UZEyDbQKBgHiN\nw++IM8+rKafMFGv4KEcfw3JEOMtM098tYF/J/Gl9snqqdPoxpZhv8NTGbA9OC2oK\nKt+q3fPkETq5CfLkyC/zo5MN0IcHtyZyBQcaNwc3mlkv527hkpWX4mgjzeAUJUbz\nIpuEMs8U5YYJLLlTTHKHpnQ27J/ye1Dj9mRnISlJAoGAJCG2d8AOM1HeC6eKu8hy\nlYmLLgpCe3KsMnZLSP8iUpAr5MPJUUanbBeAr0+Au/4+swOpRKe/kyQYhuXETKlN\nh+gOzOItYTbqNPfCAWfnu0sQZdNh2hZ6LRLIpUgIOZr78D2K47El/jsVMuE7FHIJ\nRBIrkaKz4szVC7LVEJ8G6G0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-1fe4d@light-novel-reader.iam.gserviceaccount.com",
+  "client_id": "115606208186352249776",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-1fe4d%40light-novel-reader.iam.gserviceaccount.com"
+}
