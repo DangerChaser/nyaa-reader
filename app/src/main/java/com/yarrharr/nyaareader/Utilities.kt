@@ -3,6 +3,7 @@ package com.yarrharr.nyaareader
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.annotation.Keep
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -14,12 +15,13 @@ class Utilities private constructor(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE)
     val db = Firebase.firestore
 
-    enum class BookListKeys(s: String) {
-        ALL("ALL_BOOKS"),
-        FINISHED("FINISHED_BOOKS"),
-        WISHLISTED("WISHLISTED_BOOKS"),
-        IN_PROGRESS("IN_PROGRESS_BOOKS"),
-        FAVORITE("FAVORITE_BOOKS")
+    @Keep
+    enum class BookListKeys {
+        ALL,
+        FINISHED,
+        WISHLISTED,
+        IN_PROGRESS,
+        FAVORITE
     }
 
     private fun initData() {
@@ -104,7 +106,7 @@ class Utilities private constructor(context: Context) {
             val editor = sharedPreferences.edit()
             editor.remove(key.toString())
             editor.putString(key.toString(), gson.toJson(books))
-            editor.commit()
+            editor.apply()
             return true
         }
         return false
@@ -124,7 +126,7 @@ class Utilities private constructor(context: Context) {
             val editor = sharedPreferences.edit()
             editor.remove(key.toString())
             editor.putString(key.toString(), gson.toJson(books))
-            editor.commit()
+            editor.apply()
             return true
         }
         return false
@@ -159,7 +161,7 @@ class Utilities private constructor(context: Context) {
         val gson = Gson()
         if (finishedBooks == null) {
             editor.putString(BookListKeys.FINISHED.toString(), gson.toJson(ArrayList<Book>()))
-            editor.commit()
+            editor.apply()
         }
         if (wishlistedBooks == null) {
             editor.putString(BookListKeys.WISHLISTED.toString(), gson.toJson(ArrayList<Book>()))
