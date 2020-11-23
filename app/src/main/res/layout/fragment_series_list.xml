@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookListFragment"
+    tools:context=".SeriesListFragment"
     android:layout_margin="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewBooks"
+        android:id="@+id/recyclerViewSeries"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

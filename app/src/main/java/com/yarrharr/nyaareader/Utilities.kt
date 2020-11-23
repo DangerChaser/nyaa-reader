@@ -10,136 +10,48 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.ArrayList
 
-const val BOOK_LIST_KEY = "BOOK_LIST_KEY"
 class Utilities private constructor(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE)
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
+
+    private val allSeries: ArrayList<Series>?
+        get() {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Series?>?>() {}.type
+            return gson.fromJson(sharedPreferences.getString(ListKeys.ALL.toString(), null), type)
+        }
+    private val finishedSeries: ArrayList<Series>?
+        get() {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Series?>?>() {}.type
+            return gson.fromJson(sharedPreferences.getString(ListKeys.FINISHED.toString(), null), type)
+        }
+    private val wantToReadSeries: ArrayList<Series>?
+        get() {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Series?>?>() {}.type
+            return gson.fromJson(sharedPreferences.getString(ListKeys.WANT_TO_READ.toString(), null), type)
+        }
+    private val readingSeries: ArrayList<Series>?
+        get() {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Series?>?>() {}.type
+            return gson.fromJson(sharedPreferences.getString(ListKeys.READING.toString(), null), type)
+        }
+    private val favoriteSeries: ArrayList<Series>?
+        get() {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Series?>?>() {}.type
+            return gson.fromJson(sharedPreferences.getString(ListKeys.FAVORITE.toString(), null), type)
+        }
 
     @Keep
-    enum class BookListKeys {
+    enum class ListKeys {
         ALL,
         FINISHED,
-        WISHLISTED,
-        IN_PROGRESS,
+        WANT_TO_READ,
+        READING,
         FAVORITE
-    }
-
-    private fun initData() {
-        db.collection("books")
-                .get()
-                .addOnSuccessListener { result ->
-                    val books = ArrayList<Book>()
-                    for ((i, document) in result.withIndex()) {
-                        Log.d(TAG, "${document.id} => ${document.data}")
-                        val name = document.id
-                        val author = document.data["author"] as String
-                        val imageUrl = document.data["imageUrl"] as String
-                        var description = document.data["description"] as String?
-                        if (description == null) {
-                            description = ""
-                        }
-                        val book = Book(i, name, author, imageUrl, description)
-                        books.add(book)
-                    }
-
-                    val editor = sharedPreferences.edit()
-                    val gson = Gson()
-                    editor.putString(BookListKeys.ALL.toString(), gson.toJson(books))
-                    editor.apply()
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
-                }
-    }
-
-    private val allBooks: ArrayList<Book>?
-        get() {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Book?>?>() {}.type
-            return gson.fromJson(sharedPreferences.getString(BookListKeys.ALL.toString(), null), type)
-        }
-    private val finishedBooks: ArrayList<Book>?
-        get() {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Book?>?>() {}.type
-            return gson.fromJson(sharedPreferences.getString(BookListKeys.FINISHED.toString(), null), type)
-        }
-    private val wishlistedBooks: ArrayList<Book>?
-        get() {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Book?>?>() {}.type
-            return gson.fromJson(sharedPreferences.getString(BookListKeys.WISHLISTED.toString(), null), type)
-        }
-    private val currentlyReadingBooks: ArrayList<Book>?
-        get() {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Book?>?>() {}.type
-            return gson.fromJson(sharedPreferences.getString(BookListKeys.IN_PROGRESS.toString(), null), type)
-        }
-    private val favoriteBooks: ArrayList<Book>?
-        get() {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Book?>?>() {}.type
-            return gson.fromJson(sharedPreferences.getString(BookListKeys.FAVORITE.toString(), null), type)
-        }
-
-    fun getBookById(id: Int): Book? {
-        for (book in allBooks!!) {
-            if (book.id == id) {
-                return book
-            }
-        }
-        return null
-    }
-
-    fun addBookToList(book: Book, key: BookListKeys): Boolean {
-        val books = when (key) {
-            BookListKeys.FINISHED -> finishedBooks
-            BookListKeys.WISHLISTED -> wishlistedBooks
-            BookListKeys.IN_PROGRESS -> currentlyReadingBooks
-            BookListKeys.FAVORITE -> favoriteBooks
-            else -> allBooks
-        } ?: return false
-
-        if (books.add(book)) {
-            val gson = Gson()
-            val editor = sharedPreferences.edit()
-            editor.remove(key.toString())
-            editor.putString(key.toString(), gson.toJson(books))
-            editor.apply()
-            return true
-        }
-        return false
-    }
-
-    fun removeBookFromList(book: Book, key: BookListKeys): Boolean {
-        val books = when (key) {
-            BookListKeys.FINISHED -> finishedBooks
-            BookListKeys.WISHLISTED -> wishlistedBooks
-            BookListKeys.IN_PROGRESS -> currentlyReadingBooks
-            BookListKeys.FAVORITE -> favoriteBooks
-            else -> allBooks
-        } ?: return false
-
-        if (books.remove(book)) {
-            val gson = Gson()
-            val editor = sharedPreferences.edit()
-            editor.remove(key.toString())
-            editor.putString(key.toString(), gson.toJson(books))
-            editor.apply()
-            return true
-        }
-        return false
-    }
-
-    fun getBookList(key: BookListKeys): ArrayList<Book>? {
-        return when (key) {
-            BookListKeys.ALL -> allBooks
-            BookListKeys.FAVORITE -> favoriteBooks
-            BookListKeys.IN_PROGRESS -> currentlyReadingBooks
-            BookListKeys.WISHLISTED -> wishlistedBooks
-            BookListKeys.FINISHED -> finishedBooks
-        }
     }
 
     companion object {
@@ -159,21 +71,95 @@ class Utilities private constructor(context: Context) {
         initData()
         val editor = sharedPreferences.edit()
         val gson = Gson()
-        if (finishedBooks == null) {
-            editor.putString(BookListKeys.FINISHED.toString(), gson.toJson(ArrayList<Book>()))
+        if (finishedSeries == null) {
+            editor.putString(ListKeys.FINISHED.toString(), gson.toJson(ArrayList<Series>()))
             editor.apply()
         }
-        if (wishlistedBooks == null) {
-            editor.putString(BookListKeys.WISHLISTED.toString(), gson.toJson(ArrayList<Book>()))
+        if (wantToReadSeries == null) {
+            editor.putString(ListKeys.WANT_TO_READ.toString(), gson.toJson(ArrayList<Series>()))
             editor.commit()
         }
-        if (currentlyReadingBooks == null) {
-            editor.putString(BookListKeys.IN_PROGRESS.toString(), gson.toJson(ArrayList<Book>()))
+        if (readingSeries == null) {
+            editor.putString(ListKeys.READING.toString(), gson.toJson(ArrayList<Series>()))
             editor.commit()
         }
-        if (favoriteBooks == null) {
-            editor.putString(BookListKeys.FAVORITE.toString(), gson.toJson(ArrayList<Book>()))
+        if (favoriteSeries == null) {
+            editor.putString(ListKeys.FAVORITE.toString(), gson.toJson(ArrayList<Series>()))
             editor.commit()
+        }
+    }
+
+    private fun initData() {
+        db.collection("series")
+                .get()
+                .addOnSuccessListener { result ->
+                    val seriesList = ArrayList<Series>()
+                    for ((i, document) in result.withIndex()) {
+                        Log.d(TAG, "${document.id} => ${document.data}")
+                        val name = document.id
+                        val imageUrl = document.data["imageUrl"] as String
+                        var synopsis = document.data["synopsis"] as String?
+                        if (synopsis == null) {
+                            synopsis = "No synopsis has been added yet."
+                        }
+                        val series = Series(i, name, imageUrl, synopsis)
+                        seriesList.add(series)
+                    }
+
+                    val editor = sharedPreferences.edit()
+                    val gson = Gson()
+                    editor.putString(ListKeys.ALL.toString(), gson.toJson(seriesList))
+                    editor.apply()
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+                }
+    }
+
+    fun getSeriesById(id: Int): Series? {
+        for (series in allSeries!!) {
+            if (series.id == id) {
+                return series
+            }
+        }
+        return null
+    }
+
+    fun addSeriesToList(series: Series, key: ListKeys): Boolean {
+        val seriesList = getList(key) ?: return false
+
+        if (seriesList.add(series)) {
+            val gson = Gson()
+            val editor = sharedPreferences.edit()
+            editor.remove(key.toString())
+            editor.putString(key.toString(), gson.toJson(seriesList))
+            editor.apply()
+            return true
+        }
+        return false
+    }
+
+    fun removeSeriesFromList(series: Series, key: ListKeys): Boolean {
+        val seriesList = getList(key) ?: return false
+
+        if (seriesList.remove(series)) {
+            val gson = Gson()
+            val editor = sharedPreferences.edit()
+            editor.remove(key.toString())
+            editor.putString(key.toString(), gson.toJson(seriesList))
+            editor.apply()
+            return true
+        }
+        return false
+    }
+
+    fun getList(key: ListKeys): ArrayList<Series>? {
+        return when (key) {
+            ListKeys.FINISHED -> finishedSeries
+            ListKeys.WANT_TO_READ -> wantToReadSeries
+            ListKeys.READING -> readingSeries
+            ListKeys.FAVORITE -> favoriteSeries
+            else -> allSeries
         }
     }
 }

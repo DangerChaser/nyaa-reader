@@ -12,31 +12,31 @@
         tools:layout="@layout/fragment_main_menu" >
         <action
             android:id="@+id/mainMenuFragment_to_bookListFragment"
-            app:destination="@id/bookListFragment"
+            app:destination="@id/seriesListFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_up"
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
-        android:id="@+id/bookListFragment"
-        android:name="com.yarrharr.nyaareader.BookListFragment"
-        android:label="fragment_book_list"
-        tools:layout="@layout/fragment_book_list" >
+        android:id="@+id/seriesListFragment"
+        android:name="com.yarrharr.nyaareader.SeriesListFragment"
+        android:label="fragment_series_list"
+        tools:layout="@layout/fragment_series_list">
         <argument
-            android:name="bookListKey"
-            app:argType="com.yarrharr.nyaareader.Utilities$BookListKeys" />
+            android:name="listKey"
+            app:argType="com.yarrharr.nyaareader.Utilities$ListKeys" />
         <action
             android:id="@+id/action_bookListFragment_to_bookFragment"
-            app:destination="@id/bookFragment" />
+            app:destination="@id/seriesFragment" />
     </fragment>
     <fragment
-        android:id="@+id/bookFragment"
-        android:name="com.yarrharr.nyaareader.BookFragment"
-        android:label="fragment_book"
-        tools:layout="@layout/fragment_book" >
+        android:id="@+id/seriesFragment"
+        android:name="com.yarrharr.nyaareader.SeriesFragment"
+        android:label="fragment_series"
+        tools:layout="@layout/fragment_series">
         <argument
-            android:name="bookId"
+            android:name="id"
             app:argType="integer" />
     </fragment>
 </navigation>

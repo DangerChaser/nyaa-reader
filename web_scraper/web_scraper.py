@@ -6,8 +6,6 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-import time
-
 # Use the application default credentials
 cred = credentials.Certificate("nuclear_launch_codes.json")
 firebase_admin.initialize_app(cred, {
@@ -17,89 +15,79 @@ firebase_admin.initialize_app(cred, {
 db = firestore.client()
 
 
-class Book:
-    def __init__(self, name, author, image_url, description):
+class Series:
+    def __init__(self, _id, name, image_url, synopsis):
+        self.id = _id
         self.name = name
-        self.author = author
         self.image_url = image_url
-        self.description = description
+        self.synopsis = synopsis
     
 
-def scrape_page(index):
-    website = "https://www.goodreads.com"
-    list_url = website + "/shelf/show/light-novel?page=" + str(index)
-    html = requests.get(list_url).text
-    soup = BeautifulSoup(html, 'lxml')
-    left_container = soup.find("div", {"class": "leftContainer"})
-    books = left_container.findAll("div", {"class": "left"})
-    print(list_url)
-    for b in books:
-        title = b.find("a", {"class": "bookTitle"})
-        book_name = title.text
+website = "https://www.anime-planet.com"
 
-        book_url = website + title.get("href")
-        book_result = requests.get(book_url)
-        book_src = book_result.content
-        book_soup = BeautifulSoup(book_src, "html5lib")
+def main():
+    domain = "/manga/tags/light-novels"
+    first_page = requests.get(website + domain).text
+    first_page_soup = BeautifulSoup(first_page, "lxml")
 
-        topcol = book_soup.find(id="topcol")
-        if not topcol:
-            continue
-        image_url = scrape_image_url(topcol)
+    collection = first_page_soup.find("ul", {"class" : "cardDeck cardGrid"})
+    scrape_collection(collection)
 
-        metacol = topcol.find(id="metacol")
-        if not metacol:
-            continue
-        book_author = scrape_author(metacol)
+    pagination = first_page_soup.find("div", {"class" : "pagination aligncenter"})
+    next_page = pagination.find("li", {"class" : "next"})
+    next_page_a = next_page.find("a")
 
-        book_description = scrape_description(metacol)
-        
-        book = Book(book_name, book_author, image_url, book_description)
-        print(book.name)
+    index = 2
+    while (next_page_a):
+        print(index)
 
-        # doc_ref = db.collection("books").document(book.name)
-        # doc_ref.set({
-        #     "author": book.author,
-        #     "imageUrl": book.image_url,
-        #     "description": book.description
-        # })
+        query = next_page_a.get("href")
+        html = requests.get(website + domain + query).text
+        soup = BeautifulSoup(html, 'lxml')
+        collection = soup.find("ul", {"class" : "cardDeck cardGrid"})
+        scrape_collection(collection)
+
+        # Get next page
+        pagination = soup.find("div", {"class" : "pagination aligncenter"})
+        next_page = pagination.find("li", {"class" : "next"})
+        next_page_a = next_page.find("a")
+        index += 1
 
 
-def scrape_image_url(topcol):
-    imagecol = topcol.find(id="imagecol")
-    if not imagecol:
-        return
-    cover_image = imagecol.find(id="coverImage")
-    if not cover_image:
-        return
-    return cover_image.get("src")
+def scrape_collection(collection):
+    cards = collection.findAll("li", {"class" : "card"})
+    
+    for card in cards:
+        series = scrape_series(card)
+        add_to_db(series)
+        print(series.name)
 
 
-def scrape_author(metacol):
-    book_authors = metacol.find(id="bookAuthors")
-    if not book_authors:
-        return
-    book_authors_div = book_authors.find("div")
-    if not book_authors_div:
-        return
-    book_authors_link = book_authors_div.find("a")
-    if not book_authors_link:
-        return
-    return book_authors_link.text
+def scrape_series(card):
+    href = card.find("a").get("href")
+    _id = href.removeprefix("/manga/")
+
+    result = requests.get(website + href)
+    item_src = result.content
+    item_soup = BeautifulSoup(item_src, "lxml")
+
+    name = item_soup.find("h1", {"itemprop": "name"}).getText()
+
+    entry = item_soup.find("section", {"id" : "entry"})
+    image_url = website + entry.find("img").get("src")
+    snyopsis = entry.find("p").getText()
+    
+    return Series(_id, name, image_url, snyopsis)
 
 
-def scrape_description(metacol):
-    description_container = metacol.find(id="descriptionContainer")
-    if not description_container:
-        return
-    description_container_2_electric_boogaloo = description_container.find(id="description")
-    if not description_container_2_electric_boogaloo:
-        return
-    book_descriptions = description_container_2_electric_boogaloo.findAll("span")
-    if len(book_descriptions) == 0:
-        return
-    return book_descriptions[len(book_descriptions) - 1].text
+def add_to_db(series):
+    doc_ref = db.collection("series").document(series.id)
+    doc_ref.set({
+        "name": series.name,
+        "imageUrl": series.image_url,
+        "synopsis": series.synopsis
+    })
 
-max_num_pages = 25
-for index in range(2,max_num_pages):
-    scrape_page(index)
+
+
+main()

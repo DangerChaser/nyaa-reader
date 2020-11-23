@@ -22,23 +22,23 @@ class MainMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         buttonAllBooks.setOnClickListener {
-            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.BookListKeys.ALL)
+            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.ListKeys.ALL)
             Navigation.findNavController(view).navigate(action)
         }
         buttonAlreadyRead.setOnClickListener {
-            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.BookListKeys.FINISHED)
+            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.ListKeys.FINISHED)
             Navigation.findNavController(view).navigate(action)
         }
         buttonCurrentlyReading.setOnClickListener {
-            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.BookListKeys.IN_PROGRESS)
+            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.ListKeys.READING)
             Navigation.findNavController(view).navigate(action)
         }
         buttonFavorites.setOnClickListener {
-            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.BookListKeys.FAVORITE)
+            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.ListKeys.FAVORITE)
             Navigation.findNavController(view).navigate(action)
         }
         buttonWantToRead.setOnClickListener {
-            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.BookListKeys.WISHLISTED)
+            val action = MainMenuFragmentDirections.mainMenuFragmentToBookListFragment(Utilities.ListKeys.WANT_TO_READ)
             Navigation.findNavController(view).navigate(action)
         }
     }
